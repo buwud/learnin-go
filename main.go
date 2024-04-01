@@ -16,12 +16,24 @@ func main() {
 	fmt.Printf("We have total of %v tickets and %v are still available\n", conferenceTickets, remainingTickets)
 	fmt.Println("Get your tickets here to attend")
 
-	var userName string //go doesnt know its type because its not assigned initially, have to add type
+	var firstName string //go doesnt know its type because its not assigned initially, have to add type
+	var lastName string
+	var email string
 	var userTickets int
 	//ask user for their name
+	fmt.Print(("Enter your first name: "))
+	fmt.Scan(&firstName)
 
-	userName = "Buse"
+	fmt.Print(("Enter your last name: "))
+	fmt.Scan(&lastName)
+
+	fmt.Print(("Enter your email address: "))
+	fmt.Scan(&email)
+
+	fmt.Print(("Enter number of tickets: "))
+	fmt.Scan(&userTickets)
+
 	userTickets = 2
-	fmt.Println("User %v booked %v tickets.\n", userName, userTickets)
+	fmt.Printf("Thank you %v %v for booking %v tickets. You will receive a confirmation email at %v\n", firstName, lastName, userTickets, email)
 
 }
