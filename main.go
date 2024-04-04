@@ -8,6 +8,7 @@ func main() {
 	const conferenceTickets int = 50  //cannot change like js
 	var remainingTickets uint = 50    //int
 	//uint -> positive whole numbers
+	var bookings []string //array type
 
 	fmt.Printf("conferenceTickets is %T, remainingTickets is %T, conferenceName is %T \n", conferenceTickets, remainingTickets, conferenceName)
 	//%T used to print data-type
@@ -34,6 +35,10 @@ func main() {
 	fmt.Scan(&userTickets)
 
 	remainingTickets = remainingTickets - userTickets
+	// bookings[0] = firstName + " " + lastName
+	bookings = append(bookings, firstName+" "+lastName)
+
+	fmt.Printf("The first value: %v\n", bookings[0])
 
 	userTickets = 2
 	fmt.Printf("Thank you %v %v for booking %v tickets. You will receive a confirmation email at %v\n", firstName, lastName, userTickets, email)
