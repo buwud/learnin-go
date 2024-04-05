@@ -1,6 +1,9 @@
 package main
 
-import "fmt" //io package
+import (
+	"fmt" //io package
+	"strings"
+)
 
 func main() {
 	//syntactic sugar -> describe a feauture that lets you do smth more easily
@@ -17,31 +20,40 @@ func main() {
 	fmt.Printf("We have total of %v tickets and %v are still available\n", conferenceTickets, remainingTickets)
 	fmt.Println("Get your tickets here to attend")
 
-	var firstName string //go doesnt know its type because its not assigned initially, have to add type
-	var lastName string
-	var email string
-	var userTickets uint
-	//ask user for their name
-	fmt.Print(("Enter your first name: "))
-	fmt.Scan(&firstName)
+	//only have for loop FOR loop c:
+	for {
+		var firstName string //go doesnt know its type because its not assigned initially, have to add type
+		var lastName string
+		var email string
+		var userTickets uint
+		//ask user for their name
+		fmt.Print(("Enter your first name: "))
+		fmt.Scan(&firstName)
 
-	fmt.Print(("Enter your last name: "))
-	fmt.Scan(&lastName)
+		fmt.Print(("Enter your last name: "))
+		fmt.Scan(&lastName)
 
-	fmt.Print(("Enter your email address: "))
-	fmt.Scan(&email)
+		fmt.Print(("Enter your email address: "))
+		fmt.Scan(&email)
 
-	fmt.Print(("Enter number of tickets: "))
-	fmt.Scan(&userTickets)
+		fmt.Print(("Enter number of tickets: "))
+		fmt.Scan(&userTickets)
 
-	remainingTickets = remainingTickets - userTickets
-	// bookings[0] = firstName + " " + lastName
-	bookings = append(bookings, firstName+" "+lastName)
+		remainingTickets = remainingTickets - userTickets
+		// bookings[0] = firstName + " " + lastName
+		bookings = append(bookings, firstName+" "+lastName)
+		fmt.Printf("The first value: %v\n", bookings[0])
 
-	fmt.Printf("The first value: %v\n", bookings[0])
+		fmt.Printf("Thank you %v %v for booking %v tickets. You will receive a confirmation email at %v\n", firstName, lastName, userTickets, email)
+		fmt.Printf("%v tickets remaining for %v\n", remainingTickets, conferenceName)
 
-	userTickets = 2
-	fmt.Printf("Thank you %v %v for booking %v tickets. You will receive a confirmation email at %v\n", firstName, lastName, userTickets, email)
-	fmt.Printf("%v tickets remaining for %v\n", remainingTickets, conferenceName)
-
+		firstNames := []string{}
+		//blank identifier (_) -> to ignore a variable you dont want to use
+		for _, booking := range bookings {
+			var names = strings.Fields(booking) //splits the string with white space as seperator,
+			//returns a slice with the split element
+			firstNames = append(firstNames, names[0])
+		}
+		fmt.Printf("The first names of bookings are: %v \n", firstNames)
+	}
 }
