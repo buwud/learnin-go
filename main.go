@@ -37,11 +37,8 @@ func main() {
 		fmt.Print(("Enter number of tickets: "))
 		fmt.Scan(&userTickets)
 
-		isValidName := len(firstName) >= 2 && len(lastName) >= 2 //validate -> at least 2 chars
-		isValidEmail := strings.Contains(email, "@")
-		isValidTicketNumber := userTickets > 0 && userTickets <= remainingTickets
-
 		//isValidCity := city == "Singapore" || city == "London"
+		isValidName, isValidEmail, isValidTicketNumber := validateUserInput(firstName, lastName, email, userTickets, remainingTickets)
 
 		if isValidName && isValidEmail && isValidTicketNumber {
 			remainingTickets = remainingTickets - userTickets
@@ -53,7 +50,8 @@ func main() {
 			fmt.Printf("%v tickets remaining for %v\n", remainingTickets, conferenceName)
 
 			//call func
-			printFirstNames(bookings)
+			firstNames := getFirstNames(bookings)
+			fmt.Printf("The first names of bookings are: %v \n", firstNames)
 
 			// noTicketRemaining bool = remainingTickets == 0
 			noTicketRemaining := remainingTickets == 0
@@ -94,7 +92,7 @@ func greetUsers(confName string, confTickets int, remainingTickets uint) { //onl
 	fmt.Printf("We have total of %v tickets and %v are still available\n", confTickets, remainingTickets)
 	fmt.Println("Get your tickets here to attend")
 }
-func printFirstNames(bookings []string) {
+func getFirstNames(bookings []string) []string {
 	firstNames := []string{}
 	//blank identifier (_) -> to ignore a variable you dont want to use
 	for _, booking := range bookings {
@@ -102,5 +100,12 @@ func printFirstNames(bookings []string) {
 		//returns a slice with the split element
 		firstNames = append(firstNames, names[0])
 	}
-	fmt.Printf("The first names of bookings are: %v \n", firstNames)
+	return firstNames
+	//fmt.Printf("The first names of bookings are: %v \n", firstNames)
+}
+func validateUserInput(firstName string, lastName string, email string, userTickets uint, remainingTickets uint) (bool, bool, bool) {
+	isValidName := len(firstName) >= 2 && len(lastName) >= 2 //validate -> at least 2 chars
+	isValidEmail := strings.Contains(email, "@")
+	isValidTicketNumber := userTickets > 0 && userTickets <= remainingTickets
+	return isValidName, isValidEmail, isValidTicketNumber
 }
