@@ -13,12 +13,10 @@ func main() {
 	//uint -> positive whole numbers
 	var bookings []string //array type
 
+	greetUsers(conferenceName, conferenceTickets, remainingTickets)
+
 	fmt.Printf("conferenceTickets is %T, remainingTickets is %T, conferenceName is %T \n", conferenceTickets, remainingTickets, conferenceName)
 	//%T used to print data-type
-
-	fmt.Printf("Welcome to %v booking application!\n", conferenceName)
-	fmt.Printf("We have total of %v tickets and %v are still available\n", conferenceTickets, remainingTickets)
-	fmt.Println("Get your tickets here to attend")
 
 	//only have for loop FOR loop c:
 	for {
@@ -54,14 +52,8 @@ func main() {
 			fmt.Printf("Thank you %v %v for booking %v tickets. You will receive a confirmation email at %v\n", firstName, lastName, userTickets, email)
 			fmt.Printf("%v tickets remaining for %v\n", remainingTickets, conferenceName)
 
-			firstNames := []string{}
-			//blank identifier (_) -> to ignore a variable you dont want to use
-			for _, booking := range bookings {
-				var names = strings.Fields(booking) //splits the string with white space as seperator,
-				//returns a slice with the split element
-				firstNames = append(firstNames, names[0])
-			}
-			fmt.Printf("The first names of bookings are: %v \n", firstNames)
+			//call func
+			printFirstNames(bookings)
 
 			// noTicketRemaining bool = remainingTickets == 0
 			noTicketRemaining := remainingTickets == 0
@@ -95,4 +87,20 @@ func main() {
 	default:
 		fmt.Print("No valid city selected")
 	}
+}
+
+func greetUsers(confName string, confTickets int, remainingTickets uint) { //only executed when called
+	fmt.Printf("Welcome to %v booking application\n", confName)
+	fmt.Printf("We have total of %v tickets and %v are still available\n", confTickets, remainingTickets)
+	fmt.Println("Get your tickets here to attend")
+}
+func printFirstNames(bookings []string) {
+	firstNames := []string{}
+	//blank identifier (_) -> to ignore a variable you dont want to use
+	for _, booking := range bookings {
+		var names = strings.Fields(booking) //splits the string with white space as seperator,
+		//returns a slice with the split element
+		firstNames = append(firstNames, names[0])
+	}
+	fmt.Printf("The first names of bookings are: %v \n", firstNames)
 }
