@@ -83,12 +83,6 @@ func getFirstNames() []string {
 	return firstNames
 	//fmt.Printf("The first names of bookings are: %v \n", firstNames)
 }
-func validateUserInput(firstName string, lastName string, email string, userTickets uint) (bool, bool, bool) {
-	isValidName := len(firstName) >= 2 && len(lastName) >= 2 //validate -> at least 2 chars
-	isValidEmail := strings.Contains(email, "@")
-	isValidTicketNumber := userTickets > 0 && userTickets <= remainingTickets
-	return isValidName, isValidEmail, isValidTicketNumber
-}
 
 func getUserInput() (string, string, string, uint) {
 	var firstName string //go doesnt know its type because its not assigned initially, have to add type
