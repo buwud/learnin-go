@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt" //io package
+	"learning-go/helper"
 	"strings"
 )
 
@@ -24,7 +25,7 @@ func main() {
 
 		firstName, lastName, email, userTickets := getUserInput()
 		//isValidCity := city == "Singapore" || city == "London"
-		isValidName, isValidEmail, isValidTicketNumber := validateUserInput(firstName, lastName, email, userTickets)
+		isValidName, isValidEmail, isValidTicketNumber := helper.ValidateUserInput(firstName, lastName, email, userTickets, remainingTickets)
 
 		if isValidName && isValidEmail && isValidTicketNumber {
 
@@ -40,7 +41,6 @@ func main() {
 				fmt.Println("Conference is booked out. Come back next year!")
 				break
 			}
-
 		} else {
 			if !isValidName {
 				fmt.Println("first name or last name you entered is too short")
