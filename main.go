@@ -3,7 +3,7 @@ package main
 import (
 	"fmt" //io package
 	"learning-go/helper"
-	"strings"
+	"strconv"
 )
 
 // Package Level Variables - Clean Code
@@ -11,7 +11,7 @@ const conferenceTickets int = 50     //cannot change like js
 var conferenceName = "Go Conference" //string, create var w this syntax but cannot define type explicitly
 var remainingTickets uint = 50       //int
 // uint -> positive whole numbers
-var bookings []string //array type
+var bookings = make([]map[string]string, 0) //create empty list of maps, add initial size and it will increase
 
 func main() {
 	//syntactic sugar -> describe a feauture that lets you do smth more easily
@@ -76,9 +76,9 @@ func getFirstNames() []string {
 	firstNames := []string{}
 	//blank identifier (_) -> to ignore a variable you dont want to use
 	for _, booking := range bookings {
-		var names = strings.Fields(booking) //splits the string with white space as seperator,
+		//var names = strings.Fields(booking) //splits the string with white space as seperator,
 		//returns a slice with the split element
-		firstNames = append(firstNames, names[0])
+		firstNames = append(firstNames, booking["firstName"])
 	}
 	return firstNames
 	//fmt.Printf("The first names of bookings are: %v \n", firstNames)
@@ -106,9 +106,17 @@ func getUserInput() (string, string, string, uint) {
 
 func bookTicket(userTickets uint, firstName string, lastName string, email string) {
 	remainingTickets = remainingTickets - userTickets
-	bookings[0] = firstName + " " + lastName
-	bookings = append(bookings, firstName+" "+lastName)
-	//fmt.Printf("The first value: %v\n", bookings[0])
+	//bookings[0] = firstName + " " + lastName
+	//create a map for a user
+
+	var userData = make(map[string]string) //keyname and data, we cannot mix data types
+	userData["firstName"] = firstName
+	userData["lastName"] = lastName
+	userData["email"] = email
+	userData["numberOfTickets"] = strconv.FormatUint(uint64(userTickets), 10) //10 based decimal
+
+	bookings = append(bookings, userData)
+	fmt.Printf("List of bookings is: %v\n", bookings)
 
 	fmt.Printf("Thank you %v %v for booking %v tickets. You will receive a confirmation email at %v\n", firstName, lastName, userTickets, email)
 	fmt.Printf("%v tickets remaining for %v\n", remainingTickets, conferenceName)

@@ -9,3 +9,8 @@ func ValidateUserInput(firstName string, lastName string, email string, userTick
 	isValidTicketNumber := userTickets > 0 && userTickets <= remainingTickets
 	return isValidName, isValidEmail, isValidTicketNumber
 }
+
+//3 Levels of scope
+//local(within func)
+//package(outside all functions, can be used everywhere in the same package)
+//global(outside all functions, can be used everywhere accross all packages) -- uppercase letter
