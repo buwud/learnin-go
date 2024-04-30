@@ -3,7 +3,7 @@ package main
 import (
 	"fmt" //io package
 	"learning-go/helper"
-	"strconv"
+	"time"
 )
 
 // Package Level Variables - Clean Code
@@ -11,7 +11,16 @@ const conferenceTickets int = 50     //cannot change like js
 var conferenceName = "Go Conference" //string, create var w this syntax but cannot define type explicitly
 var remainingTickets uint = 50       //int
 // uint -> positive whole numbers
-var bookings = make([]map[string]string, 0) //create empty list of maps, add initial size and it will increase
+var bookings = make([]UserData, 0) //create empty list of maps, add initial size and it will increase
+
+// STRUCT
+// type --> creates new type with the name that specified
+type UserData struct {
+	firstName       string
+	lastName        string
+	email           string
+	numberOfTickets uint
+}
 
 func main() {
 	//syntactic sugar -> describe a feauture that lets you do smth more easily
@@ -30,6 +39,8 @@ func main() {
 		if isValidName && isValidEmail && isValidTicketNumber {
 
 			bookTicket(userTickets, firstName, lastName, email)
+			sendTicket(userTickets, firstName, lastName, email)
+
 			//call func
 			firstNames := getFirstNames()
 			fmt.Printf("The first names of bookings are: %v \n", firstNames)
@@ -78,7 +89,7 @@ func getFirstNames() []string {
 	for _, booking := range bookings {
 		//var names = strings.Fields(booking) //splits the string with white space as seperator,
 		//returns a slice with the split element
-		firstNames = append(firstNames, booking["firstName"])
+		firstNames = append(firstNames, booking.firstName)
 	}
 	return firstNames
 	//fmt.Printf("The first names of bookings are: %v \n", firstNames)
@@ -109,15 +120,25 @@ func bookTicket(userTickets uint, firstName string, lastName string, email strin
 	//bookings[0] = firstName + " " + lastName
 	//create a map for a user
 
-	var userData = make(map[string]string) //keyname and data, we cannot mix data types
-	userData["firstName"] = firstName
-	userData["lastName"] = lastName
-	userData["email"] = email
-	userData["numberOfTickets"] = strconv.FormatUint(uint64(userTickets), 10) //10 based decimal
+	var userData = UserData{
+		firstName:       firstName,
+		lastName:        lastName,
+		email:           email,
+		numberOfTickets: userTickets,
+	}
 
 	bookings = append(bookings, userData)
 	fmt.Printf("List of bookings is: %v\n", bookings)
 
 	fmt.Printf("Thank you %v %v for booking %v tickets. You will receive a confirmation email at %v\n", firstName, lastName, userTickets, email)
 	fmt.Printf("%v tickets remaining for %v\n", remainingTickets, conferenceName)
+}
+
+// CONCURRENCY
+func sendTicket(userTickets uint, firstName string, lastName string, email string) {
+	time.Sleep(10 * time.Second)
+	var ticket = fmt.Sprintf("%v tickets for %v %v ", userTickets, firstName, lastName)
+	fmt.Println("##############")
+	fmt.Printf("Sending ticket:\n %v to email address %v\n", ticket, email)
+	fmt.Println("##############")
 }
