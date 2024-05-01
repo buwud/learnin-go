@@ -33,51 +33,53 @@ func main() {
 	//%T used to print data-type
 
 	//only have for loop FOR loop c:
+	for {
+		firstName, lastName, email, userTickets := getUserInput()
+		//isValidCity := city == "Singapore" || city == "London"
+		isValidName, isValidEmail, isValidTicketNumber := helper.ValidateUserInput(firstName, lastName, email, userTickets, remainingTickets)
 
-	firstName, lastName, email, userTickets := getUserInput()
-	//isValidCity := city == "Singapore" || city == "London"
-	isValidName, isValidEmail, isValidTicketNumber := helper.ValidateUserInput(firstName, lastName, email, userTickets, remainingTickets)
+		if isValidName && isValidEmail && isValidTicketNumber {
 
-	if isValidName && isValidEmail && isValidTicketNumber {
+			bookTicket(userTickets, firstName, lastName, email)
 
-		bookTicket(userTickets, firstName, lastName, email)
+			wg.Add(1) //1 goroutine
+			go sendTicket(userTickets, firstName, lastName, email)
+			//go starts a new goroutine, creates new thread
 
-		wg.Add(1) //1 goroutine
-		go sendTicket(userTickets, firstName, lastName, email)
-		//go starts a new goroutine, creates new thread
+			//call func
+			firstNames := getFirstNames()
+			fmt.Printf("The first names of bookings are: %v \n", firstNames)
 
-		//call func
-		firstNames := getFirstNames()
-		fmt.Printf("The first names of bookings are: %v \n", firstNames)
-
-		// noTicketRemaining bool = remainingTickets == 0
-		noTicketRemaining := remainingTickets == 0
-		if noTicketRemaining {
-			// end the program
-			fmt.Println("Conference is booked out. Come back next year!")
+			// noTicketRemaining bool = remainingTickets == 0
+			noTicketRemaining := remainingTickets == 0
+			if noTicketRemaining {
+				// end the program
+				fmt.Println("Conference is booked out. Come back next year!")
+				break
+			}
+		} else {
+			if !isValidName {
+				fmt.Println("first name or last name you entered is too short")
+			}
+			if !isValidEmail {
+				fmt.Println("email address you entered doesn't contain @ sign")
+			}
+			if !isValidTicketNumber {
+				fmt.Println("number if tickets you entered is invalid")
+			}
+			fmt.Println("Your input data is invalid, try again.")
 		}
-	} else {
-		if !isValidName {
-			fmt.Println("first name or last name you entered is too short")
-		}
-		if !isValidEmail {
-			fmt.Println("email address you entered doesn't contain @ sign")
-		}
-		if !isValidTicketNumber {
-			fmt.Println("number if tickets you entered is invalid")
-		}
-		fmt.Println("Your input data is invalid, try again.")
-	}
 
-	city := "London"
+		city := "London"
 
-	switch city {
-	case "New York":
-	case "Singapore", "Hong Kong":
-	case "Berlin", "London":
-	case "Mexico":
-	default:
-		fmt.Print("No valid city selected")
+		switch city {
+		case "New York":
+		case "Singapore", "Hong Kong":
+		case "Berlin", "London":
+		case "Mexico":
+		default:
+			fmt.Print("No valid city selected")
+		}
 	}
 	wg.Wait() //waits for all threads to be done before application exits
 }
