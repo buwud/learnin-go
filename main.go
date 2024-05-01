@@ -3,6 +3,7 @@ package main
 import (
 	"fmt" //io package
 	"learning-go/helper"
+	"sync"
 	"time"
 )
 
@@ -22,6 +23,8 @@ type UserData struct {
 	numberOfTickets uint
 }
 
+var wg = sync.WaitGroup{}
+
 func main() {
 	//syntactic sugar -> describe a feauture that lets you do smth more easily
 	greetUsers()
@@ -30,40 +33,40 @@ func main() {
 	//%T used to print data-type
 
 	//only have for loop FOR loop c:
-	for {
 
-		firstName, lastName, email, userTickets := getUserInput()
-		//isValidCity := city == "Singapore" || city == "London"
-		isValidName, isValidEmail, isValidTicketNumber := helper.ValidateUserInput(firstName, lastName, email, userTickets, remainingTickets)
+	firstName, lastName, email, userTickets := getUserInput()
+	//isValidCity := city == "Singapore" || city == "London"
+	isValidName, isValidEmail, isValidTicketNumber := helper.ValidateUserInput(firstName, lastName, email, userTickets, remainingTickets)
 
-		if isValidName && isValidEmail && isValidTicketNumber {
+	if isValidName && isValidEmail && isValidTicketNumber {
 
-			bookTicket(userTickets, firstName, lastName, email)
-			sendTicket(userTickets, firstName, lastName, email)
+		bookTicket(userTickets, firstName, lastName, email)
 
-			//call func
-			firstNames := getFirstNames()
-			fmt.Printf("The first names of bookings are: %v \n", firstNames)
+		wg.Add(1) //1 goroutine
+		go sendTicket(userTickets, firstName, lastName, email)
+		//go starts a new goroutine, creates new thread
 
-			// noTicketRemaining bool = remainingTickets == 0
-			noTicketRemaining := remainingTickets == 0
-			if noTicketRemaining {
-				// end the program
-				fmt.Println("Conference is booked out. Come back next year!")
-				break
-			}
-		} else {
-			if !isValidName {
-				fmt.Println("first name or last name you entered is too short")
-			}
-			if !isValidEmail {
-				fmt.Println("email address you entered doesn't contain @ sign")
-			}
-			if !isValidTicketNumber {
-				fmt.Println("number if tickets you entered is invalid")
-			}
-			fmt.Println("Your input data is invalid, try again.")
+		//call func
+		firstNames := getFirstNames()
+		fmt.Printf("The first names of bookings are: %v \n", firstNames)
+
+		// noTicketRemaining bool = remainingTickets == 0
+		noTicketRemaining := remainingTickets == 0
+		if noTicketRemaining {
+			// end the program
+			fmt.Println("Conference is booked out. Come back next year!")
 		}
+	} else {
+		if !isValidName {
+			fmt.Println("first name or last name you entered is too short")
+		}
+		if !isValidEmail {
+			fmt.Println("email address you entered doesn't contain @ sign")
+		}
+		if !isValidTicketNumber {
+			fmt.Println("number if tickets you entered is invalid")
+		}
+		fmt.Println("Your input data is invalid, try again.")
 	}
 
 	city := "London"
@@ -76,6 +79,7 @@ func main() {
 	default:
 		fmt.Print("No valid city selected")
 	}
+	wg.Wait() //waits for all threads to be done before application exits
 }
 
 func greetUsers() { //only executed when called
@@ -136,9 +140,10 @@ func bookTicket(userTickets uint, firstName string, lastName string, email strin
 
 // CONCURRENCY
 func sendTicket(userTickets uint, firstName string, lastName string, email string) {
-	time.Sleep(10 * time.Second)
+	time.Sleep(50 * time.Second)
 	var ticket = fmt.Sprintf("%v tickets for %v %v ", userTickets, firstName, lastName)
 	fmt.Println("##############")
 	fmt.Printf("Sending ticket:\n %v to email address %v\n", ticket, email)
 	fmt.Println("##############")
+	wg.Done()
 }
