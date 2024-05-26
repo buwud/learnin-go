@@ -20,9 +20,13 @@ var albums = []album{
 	{ID: "3", Title: "Sarah Vaughan and Clifford Brown", Artist: "Sarah Vaughan", Price: 39.99},
 }
 
+//command for running
+//Invoke-RestMethod -Uri http://localhost:4242/albums/2 -Method Post -ContentType "application/json"
+
 func main() {
 	router := gin.Default()
 	router.GET("/albums", getAlbums)
+	router.POST("/albums/:id", getAlbumById)
 	router.POST("/albums", postAlbums)
 
 	router.Run("localhost:4242")
@@ -31,6 +35,19 @@ func main() {
 // getAlbums all
 func getAlbums(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, albums)
+}
+
+// getAlbumById
+func getAlbumById(c *gin.Context) {
+	id := c.Param("id")
+	for _, a := range albums {
+		if a.ID == id {
+			c.IndentedJSON(http.StatusOK, a)
+			return
+		}
+	}
+	//else return not-found error
+	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "album not found"})
 }
 
 // addAlbums
